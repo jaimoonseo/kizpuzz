@@ -1,0 +1,329 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+}
+
+header h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+  font-size: 1.2em;
+  opacity: 0.9;
+}
+
+/* 도구 패널 */
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.tool-section {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tool-section h3 {
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 1em;
+}
+
+/* 모양 버튼 */
+.shapes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.shape-btn {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 5px;
+}
+
+.shape-btn:hover {
+  border-color: #667eea;
+  transform: scale(1.1);
+}
+
+.shape-btn.active {
+  border-color: #667eea;
+  background: #f0f4ff;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+.shape-btn svg {
+  width: 100%;
+  height: 100%;
+  color: #333;
+}
+
+.shape-preview {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+/* 도구 버튼 */
+.tools {
+  display: flex;
+  gap: 8px;
+}
+
+.tool-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.tool-btn:hover {
+  border-color: #667eea;
+}
+
+.tool-btn.active {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+
+/* 색상 버튼 */
+.colors {
+  display: flex;
+  gap: 8px;
+}
+
+.color-btn {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.color-btn:hover {
+  transform: scale(1.1);
+}
+
+.color-btn.active {
+  border-color: #667eea;
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+/* 기타 버튼 */
+.btn-clear,
+.btn-hint,
+.btn-answer,
+.btn-export {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-clear {
+  background: #ff6b6b;
+  color: white;
+}
+
+.btn-clear:hover {
+  background: #ff5252;
+}
+
+.btn-hint {
+  background: #ffd93d;
+  color: #333;
+}
+
+.btn-hint:hover {
+  background: #ffc107;
+}
+
+.btn-answer {
+  background: #51cf66;
+  color: white;
+}
+
+.btn-answer:hover {
+  background: #40c057;
+}
+
+.btn-export {
+  background: #748ffc;
+  color: white;
+}
+
+.btn-export:hover {
+  background: #5c7cfa;
+}
+
+/* 게임 보드 */
+.game-board {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.game-board h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.board-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#gameCanvas {
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  aspect-ratio: 1 / 1;  /* 720:720 정사각형 */
+  border: 3px solid #667eea;
+  border-radius: 8px;
+  cursor: crosshair;
+  background: white;
+  flex-shrink: 0;
+}
+
+/* 답안지 */
+.answer-sheet {
+  background: #fffef8;
+  border: 2px solid #ffd93d;
+  border-radius: 8px;
+  padding: 15px;
+  min-width: 200px;
+  max-width: 250px;
+  flex-shrink: 0;
+}
+
+.answer-sheet h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.1em;
+  border-bottom: 2px solid #ffd93d;
+  padding-bottom: 8px;
+}
+
+.answer-item {
+  margin-bottom: 12px;
+  font-size: 0.95em;
+  color: #444;
+  line-height: 1.6;
+}
+
+.answer-item strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* 문제 설명 */
+.problem-description {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.problem-description h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.problem-description p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.problem-description button {
+  padding: 12px 24px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.problem-description button:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .board-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #gameCanvas {
+    max-width: 480px;  /* 12칸 * 60px = 720px의 작은 버전 */
+  }
+
+  .answer-sheet {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  header h1 {
+    font-size: 1.8em;
+  }
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>패턴 퍼즐 게임</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🧩 패턴 퍼즐 게임</h1>
+      <p>규칙을 찾아 알맞은 그림을 그리세요!</p>
+    </header>
+
+    <!-- 도구 패널 -->
+    <div class="toolbar">
+      <div class="tool-section">
+        <h3>🎨 모양 도장</h3>
+        <div class="shapes">
+          <button class="shape-btn" data-shape="star" title="파란 별">
+            <canvas class="shape-preview"></canvas>
+          </button>
+          <button class="shape-btn" data-shape="spade" title="주황 스페이드">
+            <canvas class="shape-preview"></canvas>
+          </button>
+          <button class="shape-btn" data-shape="diamond" title="파란 다이아몬드">
+            <canvas class="shape-preview"></canvas>
+          </button>
+          <button class="shape-btn" data-shape="heart" title="핑크 하트">
+            <canvas class="shape-preview"></canvas>
+          </button>
+          <button class="shape-btn" data-shape="clover" title="초록 클로버">
+            <canvas class="shape-preview"></canvas>
+          </button>
+        </div>
+      </div>
+
+      <div class="tool-section">
+        <h3>✏️ 그리기 도구</h3>
+        <div class="tools">
+          <button class="tool-btn active" data-tool="pencil" title="연필">
+            ✏️ 연필
+          </button>
+          <button class="tool-btn" data-tool="eraser" title="지우개">
+            🧹 지우개
+          </button>
+        </div>
+      </div>
+
+      <div class="tool-section">
+        <h3>🎨 연필 색상</h3>
+        <div class="colors">
+          <button class="color-btn active" data-color="#FF0000" style="background: #FF0000" title="빨강"></button>
+          <button class="color-btn" data-color="#0000FF" style="background: #0000FF" title="파랑"></button>
+          <button class="color-btn" data-color="#000000" style="background: #000000" title="검정"></button>
+        </div>
+      </div>
+
+      <div class="tool-section">
+        <h3>⚙️ 기타</h3>
+        <button class="btn-clear" onclick="clearBoard()">🗑️ 전체 지우기</button>
+        <button class="btn-hint" onclick="showHint()">💡 힌트 보기</button>
+        <button class="btn-answer" onclick="showAnswer()">✅ 정답 보기</button>
+        <button class="btn-export" onclick="exportAnswers()">📤 정답 출력</button>
+      </div>
+    </div>
+
+    <!-- 게임 보드 -->
+    <div class="game-board">
+      <h3>게임 보드 (클릭하여 도장 찍기 / 드래그하여 그리기)</h3>
+      <div class="board-container">
+        <canvas id="gameCanvas"></canvas>
+        <div class="answer-sheet">
+          <h4>✍️ 답안지</h4>
+          <div id="answerList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 문제 설명 -->
+    <div class="problem-description">
+      <h3>📝 문제</h3>
+      <p id="problemText">규칙을 찾아 빈 칸을 채우세요! (이미지와 동일한 문제)</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
