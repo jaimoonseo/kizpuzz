@@ -74,6 +74,8 @@ header p {
   cursor: pointer;
   transition: all 0.2s;
   padding: 5px;
+  touch-action: manipulation; /* 더블탭 확대 방지 */
+  user-select: none;
 }
 
 .shape-btn:hover {
@@ -115,6 +117,8 @@ header p {
   font-size: 0.9em;
   font-weight: 600;
   transition: all 0.2s;
+  touch-action: manipulation;
+  user-select: none;
 }
 
 .tool-btn:hover {
@@ -139,6 +143,8 @@ header p {
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s;
+  touch-action: manipulation;
+  user-select: none;
 }
 
 .color-btn:hover {
@@ -233,6 +239,10 @@ header p {
   cursor: crosshair;
   background: white;
   flex-shrink: 0;
+  touch-action: none; /* 터치 제스처 비활성화 (드래그, 확대/축소 방지) */
+  user-select: none; /* 텍스트 선택 방지 */
+  -webkit-user-select: none;
+  -webkit-touch-callout: none; /* iOS에서 롱프레스 메뉴 방지 */
 }
 
 /* 답안지 */

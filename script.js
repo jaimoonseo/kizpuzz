@@ -99,10 +99,10 @@ canvas.addEventListener('mouseup', stopDrawing);
 canvas.addEventListener('mouseout', stopDrawing);
 canvas.addEventListener('click', handleClick);
 
-// 터치 이벤트
-canvas.addEventListener('touchstart', handleTouch);
-canvas.addEventListener('touchmove', handleTouch);
-canvas.addEventListener('touchend', stopDrawing);
+// 터치 이벤트 (passive: false로 preventDefault 허용)
+canvas.addEventListener('touchstart', handleTouch, { passive: false });
+canvas.addEventListener('touchmove', handleTouch, { passive: false });
+canvas.addEventListener('touchend', handleTouch, { passive: false });
 
 function startDrawing(e) {
   if (currentTool === 'stamp') return; // 도장 모드에서는 드로잉 안함
@@ -379,15 +379,25 @@ function drawArrowhead(tipX, tipY, fromX, fromY, color) {
 
 function handleTouch(e) {
   e.preventDefault();
-  const touch = e.touches[0];
-  const mouseEvent = new MouseEvent(
-    e.type === 'touchstart' ? 'mousedown' : e.type === 'touchmove' ? 'mousemove' : 'mouseup',
-    {
-      clientX: touch.clientX,
-      clientY: touch.clientY
+
+  // touchend는 touches[0]가 없으므로 changedTouches 사용
+  const touch = e.touches[0] || e.changedTouches[0];
+  if (!touch) return;
+
+  if (e.type === 'touchstart') {
+    // 터치 시작 - 도장 모드면 클릭, 아니면 드로잉 시작
+    if (currentTool === 'stamp') {
+      handleClick({ clientX: touch.clientX, clientY: touch.clientY });
+    } else {
+      startDrawing({ clientX: touch.clientX, clientY: touch.clientY });
     }
-  );
-  canvas.dispatchEvent(mouseEvent);
+  } else if (e.type === 'touchmove') {
+    // 터치 이동 - 드로잉
+    draw({ clientX: touch.clientX, clientY: touch.clientY });
+  } else if (e.type === 'touchend') {
+    // 터치 종료
+    stopDrawing();
+  }
 }
 
 // 캔버스 다시 그리기
