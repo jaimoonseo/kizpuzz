@@ -19,6 +19,10 @@ let currentShape = 'star';     // 기본 별
 let isDrawing = false;
 let lastGridX = -1;
 let lastGridY = -1;
+let highlightedCell = null; // 터치 피드백용 하이라이트 셀
+let touchStartTime = 0; // 터치 시작 시간
+let touchStartPos = null; // 터치 시작 위치
+let hasMoved = false; // 터치 이동 여부
 
 // 도장 색상 매핑 (고정)
 const SHAPE_COLORS = {
@@ -379,24 +383,81 @@ function drawArrowhead(tipX, tipY, fromX, fromY, color) {
 
 function handleTouch(e) {
   e.preventDefault();
+  e.stopPropagation();
 
   // touchend는 touches[0]가 없으므로 changedTouches 사용
   const touch = e.touches[0] || e.changedTouches[0];
   if (!touch) return;
 
+  const rect = canvas.getBoundingClientRect();
+  const clientX = touch.clientX;
+  const clientY = touch.clientY;
+
+  // 캔버스 영역 밖이면 무시
+  if (clientX < rect.left || clientX > rect.right ||
+      clientY < rect.top || clientY > rect.bottom) {
+    if (e.type === 'touchend') {
+      highlightedCell = null;
+      stopDrawing();
+      redrawCanvas();
+    }
+    return;
+  }
+
+  const { gridX, gridY } = getGridCoordinates(clientX, clientY);
+
   if (e.type === 'touchstart') {
-    // 터치 시작 - 도장 모드면 클릭, 아니면 드로잉 시작
-    if (currentTool === 'stamp') {
-      handleClick({ clientX: touch.clientX, clientY: touch.clientY });
-    } else {
-      startDrawing({ clientX: touch.clientX, clientY: touch.clientY });
+    // 터치 시작 정보 저장
+    touchStartTime = Date.now();
+    touchStartPos = { gridX, gridY, clientX, clientY };
+    hasMoved = false;
+
+    // 터치한 셀 하이라이트
+    highlightedCell = { gridX, gridY };
+    redrawCanvas();
+
+    // 드로잉 모드는 바로 시작
+    if (currentTool !== 'stamp') {
+      startDrawing({ clientX, clientY });
     }
   } else if (e.type === 'touchmove') {
-    // 터치 이동 - 드로잉
-    draw({ clientX: touch.clientX, clientY: touch.clientY });
+    // 이동 거리 계산 (픽셀 단위)
+    const dx = clientX - touchStartPos.clientX;
+    const dy = clientY - touchStartPos.clientY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    // 10px 이상 이동하면 드래그로 간주
+    if (distance > 10) {
+      hasMoved = true;
+    }
+
+    // 터치 이동 중 하이라이트 업데이트
+    highlightedCell = { gridX, gridY };
+
+    // 터치 이동 - 드로잉만 (도장 모드는 이동 무시)
+    if (currentTool !== 'stamp') {
+      draw({ clientX, clientY });
+    } else {
+      redrawCanvas();
+    }
   } else if (e.type === 'touchend') {
-    // 터치 종료
+    const touchDuration = Date.now() - touchStartTime;
+
+    // 도장 모드에서 짧은 터치(탭)만 도장 찍기
+    // 이동하지 않았고, 300ms 이내의 짧은 터치만 탭으로 인정
+    if (currentTool === 'stamp' && !hasMoved && touchDuration < 300) {
+      handleClick({ clientX: touchStartPos.clientX, clientY: touchStartPos.clientY });
+    }
+
+    // 터치 종료 - 하이라이트 제거
+    highlightedCell = null;
     stopDrawing();
+    redrawCanvas();
+
+    // 상태 초기화
+    touchStartTime = 0;
+    touchStartPos = null;
+    hasMoved = false;
   }
 }
 
@@ -456,6 +517,17 @@ function redrawCanvas() {
     const center = getGridCenter(stamp.gridX, stamp.gridY);
     drawShape(center.x, center.y, stamp.shape, stamp.color, 25);
   });
+
+  // 터치 하이라이트 그리기
+  if (highlightedCell) {
+    const { gridX, gridY } = highlightedCell;
+    const cellX = GRID_OFFSET_X + gridX * GRID_SIZE;
+    const cellY = GRID_OFFSET_Y + gridY * GRID_SIZE;
+
+    ctx.strokeStyle = '#667eea';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(cellX + 2, cellY + 2, GRID_SIZE - 4, GRID_SIZE - 4);
+  }
 }
 
 // 격자 그리기

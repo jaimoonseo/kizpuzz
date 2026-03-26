@@ -317,6 +317,7 @@ header p {
 @media (max-width: 768px) {
   .toolbar {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
 
   .board-container {
@@ -335,5 +336,38 @@ header p {
 
   header h1 {
     font-size: 1.8em;
+  }
+
+  /* 모바일에서 버튼 크기 확대 */
+  .shape-btn {
+    width: 60px;
+    height: 60px;
+    padding: 8px;
+  }
+
+  .tool-btn {
+    padding: 14px;
+    font-size: 1em;
+    min-height: 48px;
+  }
+
+  .color-btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .btn-clear,
+  .btn-hint,
+  .btn-answer,
+  .btn-export {
+    padding: 14px;
+    font-size: 1em;
+    min-height: 48px;
+  }
+
+  .shapes-group,
+  .tools-group,
+  .colors-group {
+    gap: 12px;
   }
 }
