@@ -193,7 +193,6 @@ header p {
 .btn-answer {
   background: #51cf66;
   color: white;
-  display: none; /* 정답 보기 버튼 숨김 */
 }
 
 .btn-answer:hover {
